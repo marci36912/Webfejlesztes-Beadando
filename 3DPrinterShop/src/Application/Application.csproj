@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+        <AssemblyName>PrinterShop.Core.Application</AssemblyName>
+        <RootNamespace>PrinterShop.Core.Application</RootNamespace>
+    </PropertyGroup>
+</Project>
