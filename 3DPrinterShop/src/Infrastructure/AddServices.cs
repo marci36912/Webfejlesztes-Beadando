@@ -11,10 +11,10 @@ public static class AddServices
 {
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection service)
     {
-        service.AddSingleton<IComponentService, ComponentService>();
-        service.AddSingleton<IPrinterService, PrinterService>();
-        service.AddSingleton<IUserService, UserService>();
-        service.AddSingleton<IOrderService, OrderService>();
+        service.AddScoped<IComponentService, ComponentService>();
+        service.AddScoped<IPrinterService, PrinterService>();
+        service.AddScoped<IUserService, UserService>();
+        service.AddScoped<IOrderService, OrderService>();
         
         service.AddDbContext<ShopDbContext>(x => x
             .UseLazyLoadingProxies()
