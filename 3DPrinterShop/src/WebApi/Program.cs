@@ -1,7 +1,13 @@
+using PrinterShop.Core.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddInfrastructureServices();
+
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
