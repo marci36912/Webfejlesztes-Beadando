@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PrinterShop.Core.Application.Interfaces.Services;
-using PrinterShop.Core.Domain.Entities;
+using PrinterShop.Shared.Dtos;
 
 namespace PrinterShop.WebApi.Controllers;
 
@@ -16,7 +16,7 @@ public class ComponentController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddAsync([FromBody] Component component)
+    public async Task<IActionResult> AddAsync([FromBody] ComponentDto component)
     {
         await _componentService.AddAsync(component);
         
@@ -24,7 +24,7 @@ public class ComponentController : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<Component>> Get(Guid id)
+    public async Task<ActionResult<ComponentDto>> Get(Guid id)
     {
         var result = await _componentService.GetAsync(id);
 
@@ -37,7 +37,7 @@ public class ComponentController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<Component>>> GetAllAsync()
+    public async Task<ActionResult<List<ComponentDto>>> GetAllAsync()
     {
         var result = await _componentService.GetAllAsync();
         
@@ -45,7 +45,7 @@ public class ComponentController : ControllerBase
     }
 
     [HttpPut]
-    public async Task<IActionResult> Update([FromBody] Component component)
+    public async Task<IActionResult> Update([FromBody] ComponentDto component)
     {
         await _componentService.UpdateAsync(component);
 

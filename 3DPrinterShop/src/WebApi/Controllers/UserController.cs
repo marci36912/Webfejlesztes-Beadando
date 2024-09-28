@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PrinterShop.Core.Application.Interfaces.Services;
-using PrinterShop.Core.Domain.Entities;
+using PrinterShop.Shared.Dtos;
 
 namespace PrinterShop.WebApi.Controllers;
 
@@ -16,7 +16,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddAsync([FromBody] User user)
+    public async Task<IActionResult> AddAsync([FromBody] UserDto user)
     {
         await _userService.AddAsync(user);
         
@@ -24,7 +24,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<User>> Get(Guid id)
+    public async Task<ActionResult<UserDto>> Get(Guid id)
     {
         var result = await _userService.GetAsync(id);
 
@@ -37,7 +37,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<User>>> GetAllAsync()
+    public async Task<ActionResult<List<UserDto>>> GetAllAsync()
     {
         var result = await _userService.GetAllAsync();
         
@@ -45,7 +45,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPut]
-    public async Task<IActionResult> Update([FromBody] User user)
+    public async Task<IActionResult> Update([FromBody] UserDto user)
     {
         await _userService.UpdateAsync(user);
 

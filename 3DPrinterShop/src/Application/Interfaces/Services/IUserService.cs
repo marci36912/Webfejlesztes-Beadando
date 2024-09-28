@@ -1,16 +1,16 @@
-﻿using PrinterShop.Core.Domain.Entities;
+﻿using PrinterShop.Shared.Dtos;
 
 namespace PrinterShop.Core.Application.Interfaces.Services;
 
 public interface IUserService
 {
-    Task AddAsync(User user);
+    Task AddAsync(UserDto user);
     
-    Task<User> GetAsync(Guid id);
+    Task<UserDto> GetAsync(Guid id);
     
-    Task<List<User>> GetAllAsync();
+    Task<List<UserDto>> GetAllAsync();
     
-    Task UpdateAsync(User user);
+    Task UpdateAsync(UserDto user);
     
     Task DeleteAsync(Guid id);
 }

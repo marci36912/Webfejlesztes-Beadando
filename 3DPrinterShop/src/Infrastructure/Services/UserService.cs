@@ -1,32 +1,105 @@
-﻿using PrinterShop.Core.Application.Interfaces.Services;
+﻿using AutoMapper;
+using FluentValidation;
+using Microsoft.EntityFrameworkCore;
+using PrinterShop.Core.Application.Interfaces.Services;
 using PrinterShop.Core.Domain.Entities;
+using PrinterShop.Core.Infrastructure.Data;
+using PrinterShop.Shared.Dtos;
 
 namespace PrinterShop.Core.Infrastructure.Services;
 
 public class UserService : IUserService
 {
-    public Task AddAsync(User user)
+    private readonly ShopDbContext _dbContext;
+    private readonly IValidator<UserDto> _validator;
+    private readonly IMapper _mapper;
+
+    public UserService(ShopDbContext dbContext, IValidator<UserDto> validator, IMapper mapper)
     {
-        throw new NotImplementedException();
+        _dbContext = dbContext;
+        _validator = validator;
+        _mapper = mapper;
+    }
+    
+    public async Task AddAsync(UserDto user)
+    {
+        var result = await GetAsync(user.Id);
+
+        if (result is not null)
+        {
+            throw new ArgumentException($"User {user.UserName} already exists");
+        }
+        
+        var validation = await _validator.ValidateAsync(user);
+
+        if (!validation.IsValid)
+        {
+            throw new ValidationException(validation.Errors);
+        }
+        
+        var mapped = _mapper.Map<User>(user);
+        
+        _dbContext.Users.Add(mapped);
+        
+        await _dbContext.SaveChangesAsync();
     }
 
-    public Task<User> GetAsync(Guid id)
+    public async Task<UserDto> GetAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var result = await _dbContext.FindAsync<Component>(id);
+
+        if (result is null)
+        {
+            throw new ArgumentNullException();
+        }
+        
+        var mapped = _mapper.Map<UserDto>(result);
+        
+        return mapped;
     }
 
-    public Task<List<User>> GetAllAsync()
+    public async Task<List<UserDto>> GetAllAsync() => 
+        (await _dbContext.Users.ToListAsync())
+        .Select(_mapper.Map<User, UserDto>)
+        .ToList();
+
+    public async Task UpdateAsync(UserDto user)
     {
-        throw new NotImplementedException();
+        var result = await GetAsync(user.Id);
+
+        if (result is null)
+        {
+            throw new ArgumentNullException();
+        }
+        
+        var validation = await _validator.ValidateAsync(user);
+
+        if (!validation.IsValid)
+        {
+            throw new ValidationException(validation.Errors);
+        }
+        
+        result.UserName = user.UserName;
+        result.Email = user.Email;
+        result.Password = user.Password;
+        result.Type = user.Type;
+        
+        await _dbContext.SaveChangesAsync();
     }
 
-    public Task UpdateAsync(User user)
+    public async Task DeleteAsync(Guid id)
     {
-        throw new NotImplementedException();
-    }
+        var result = await GetAsync(id);
 
-    public Task DeleteAsync(Guid id)
-    {
-        throw new NotImplementedException();
+        if (result is null)
+        {
+            throw new ArgumentNullException();
+        }
+        
+        var mapped = _mapper.Map<User>(result);
+        
+        _dbContext.Users.Remove(mapped);
+        
+        await _dbContext.SaveChangesAsync();
     }
 }

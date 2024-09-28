@@ -1,16 +1,16 @@
-﻿using PrinterShop.Core.Domain.Entities;
+﻿using PrinterShop.Shared.Dtos;
 
 namespace PrinterShop.Core.Application.Interfaces.Services;
 
 public interface IComponentService
 {
-    Task AddAsync(Component component);
+    Task AddAsync(ComponentDto component);
     
-    Task<Component> GetAsync(Guid id);
+    Task<ComponentDto> GetAsync(Guid id);
     
-    Task<List<Component>> GetAllAsync();
+    Task<List<ComponentDto>> GetAllAsync();
     
-    Task UpdateAsync(Component component);
+    Task UpdateAsync(ComponentDto component);
     
     Task DeleteAsync(Guid id);
 }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PrinterShop.Core.Application.Interfaces.Services;
-using PrinterShop.Core.Domain.Entities;
+using PrinterShop.Shared.Dtos;
 
 namespace PrinterShop.WebApi.Controllers;
 
@@ -16,7 +16,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddAsync([FromBody] Order order)
+    public async Task<IActionResult> AddAsync([FromBody] OrderDto order)
     {
         await _orderService.AddAsync(order);
         
@@ -24,7 +24,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<Order>> Get(Guid id)
+    public async Task<ActionResult<OrderDto>> Get(Guid id)
     {
         var result = await _orderService.GetAsync(id);
 
@@ -37,7 +37,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<Order>>> GetAllAsync()
+    public async Task<ActionResult<List<OrderDto>>> GetAllAsync()
     {
         var result = await _orderService.GetAllAsync();
         
@@ -45,7 +45,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpPut]
-    public async Task<IActionResult> Update([FromBody] Order order)
+    public async Task<IActionResult> Update([FromBody] OrderDto order)
     {
         await _orderService.UpdateAsync(order);
 

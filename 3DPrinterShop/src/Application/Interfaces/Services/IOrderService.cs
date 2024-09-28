@@ -1,16 +1,16 @@
-﻿using PrinterShop.Core.Domain.Entities;
+﻿using PrinterShop.Shared.Dtos;
 
 namespace PrinterShop.Core.Application.Interfaces.Services;
 
 public interface IOrderService
 {
-    Task AddAsync(Order order);
+    Task AddAsync(OrderDto order);
     
-    Task<Order> GetAsync(Guid id);
+    Task<OrderDto> GetAsync(Guid id);
     
-    Task<List<Order>> GetAllAsync();
+    Task<List<OrderDto>> GetAllAsync();
     
-    Task UpdateAsync(Order order);
+    Task UpdateAsync(OrderDto order);
     
     Task DeleteAsync(Guid id);
 }

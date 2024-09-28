@@ -1,16 +1,16 @@
-﻿using PrinterShop.Core.Domain.Entities;
+﻿using PrinterShop.Shared.Dtos;
 
 namespace PrinterShop.Core.Application.Interfaces.Services;
 
 public interface IPrinterService
 {
-    Task AddAsync(Printer printer);
+    Task AddAsync(PrinterDto printer);
     
-    Task<Printer> GetAsync(Guid id);
+    Task<PrinterDto> GetAsync(Guid id);
     
-    Task<List<Printer>> GetAllAsync();
+    Task<List<PrinterDto>> GetAllAsync();
     
-    Task UpdateAsync(Printer printer);
+    Task UpdateAsync(PrinterDto printer);
     
     Task DeleteAsync(Guid id);
 }
