@@ -1,4 +1,4 @@
-﻿namespace PrinterShop.Shared.Data.Dtos;
+﻿namespace PrinterShop.Shared.Dtos;
 
 public class PrinterDto
 {

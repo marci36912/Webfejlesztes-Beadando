@@ -1,6 +1,6 @@
 ﻿using Shared.Enums;
 
-namespace PrinterShop.Shared.Data.Dtos;
+namespace PrinterShop.Shared.Dtos;
 
 public class UserDto
 {
@@ -9,4 +9,6 @@ public class UserDto
     public UserType Type { get; set; }
     
     public string UserName { get; set; }
+    
+    public string Email { get; set; }
 }
