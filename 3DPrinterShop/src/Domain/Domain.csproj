@@ -6,4 +6,8 @@
         <AssemblyName>PrinterShop.Core.Domain</AssemblyName>
         <RootNamespace>PrinterShop.Core.Domain</RootNamespace>
     </PropertyGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\Shared\Shared.csproj" />
+    </ItemGroup>
+
 </Project>
