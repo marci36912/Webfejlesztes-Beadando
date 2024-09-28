@@ -46,11 +46,11 @@ public class UserService : IUserService
 
     public async Task<UserDto> GetAsync(Guid id)
     {
-        var result = await _dbContext.FindAsync<Component>(id);
+        var result = await _dbContext.FindAsync<User>(id);
 
         if (result is null)
         {
-            throw new ArgumentNullException();
+            return null;
         }
         
         var mapped = _mapper.Map<UserDto>(result);
@@ -89,16 +89,14 @@ public class UserService : IUserService
 
     public async Task DeleteAsync(Guid id)
     {
-        var result = await GetAsync(id);
+        var result = await _dbContext.FindAsync<User>(id);
 
         if (result is null)
         {
             throw new ArgumentNullException();
         }
         
-        var mapped = _mapper.Map<User>(result);
-        
-        _dbContext.Users.Remove(mapped);
+        _dbContext.Users.Remove(result);
         
         await _dbContext.SaveChangesAsync();
     }

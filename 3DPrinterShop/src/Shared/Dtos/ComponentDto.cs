@@ -1,4 +1,4 @@
-﻿using Shared.Enums;
+﻿using PrinterShop.Shared.Enums;
 
 namespace PrinterShop.Shared.Dtos;
 

@@ -18,7 +18,7 @@ public static class AddServices
         
         service.AddDbContext<ShopDbContext>(x => x
             .UseLazyLoadingProxies()
-            .UseSqlite("DataSource=:memory:"));
+            .UseSqlite("Data Source=prod.db"));
         
         return service;
     }

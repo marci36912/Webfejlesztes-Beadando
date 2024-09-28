@@ -50,7 +50,7 @@ public class OrderService : IOrderService
 
         if (result is null)
         {
-            throw new ArgumentNullException();
+            return null;
         }
         
         var mapped = _mapper.Map<OrderDto>(result);
@@ -89,7 +89,7 @@ public class OrderService : IOrderService
 
     public async Task DeleteAsync(Guid id)
     {
-        var result = await GetAsync(id);
+        var result = await _dbContext.FindAsync<Order>(id);
 
         if (result is null)
         {

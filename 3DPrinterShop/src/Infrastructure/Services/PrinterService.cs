@@ -50,7 +50,7 @@ public class PrinterService : IPrinterService
 
         if (result is null)
         {
-            throw new ArgumentNullException();
+            return null;
         }
         
         var mapped = _mapper.Map<PrinterDto>(result);
@@ -92,7 +92,7 @@ public class PrinterService : IPrinterService
 
     public async Task DeleteAsync(Guid id)
     {
-        var result = await GetAsync(id);
+        var result = await _dbContext.FindAsync<Printer>(id);
 
         if (result is null)
         {

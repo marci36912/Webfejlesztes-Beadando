@@ -1,4 +1,4 @@
-﻿namespace Shared.Enums;
+﻿namespace PrinterShop.Shared.Enums;
 
 public enum UserType
 {

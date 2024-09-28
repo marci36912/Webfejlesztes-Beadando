@@ -50,7 +50,7 @@ public class ComponentService : IComponentService
 
         if (result is null)
         {
-            throw new ArgumentNullException();
+            return null;
         }
         
         var mapped = _mapper.Map<ComponentDto>(result);
@@ -79,6 +79,8 @@ public class ComponentService : IComponentService
             throw new ValidationException(validation.Errors);
         }
         
+        
+        
         result.Brand = component.Brand;
         result.Description = component.Description;
         result.Price = component.Price;
@@ -90,7 +92,7 @@ public class ComponentService : IComponentService
 
     public async Task DeleteAsync(Guid id)
     {
-        var result = await GetAsync(id);
+        var result = await _dbContext.FindAsync<Component>(id);
 
         if (result is null)
         {
