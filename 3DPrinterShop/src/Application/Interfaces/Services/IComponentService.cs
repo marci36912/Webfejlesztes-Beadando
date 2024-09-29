@@ -8,7 +8,7 @@ public interface IComponentService
     
     Task<ComponentDto> GetAsync(Guid id);
     
-    Task<List<ComponentDto>> GetAllAsync();
+    Task<IEnumerable<ComponentDto>> GetAllAsync();
     
     Task UpdateAsync(ComponentDto component);
     

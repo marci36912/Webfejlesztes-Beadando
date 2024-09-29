@@ -58,10 +58,9 @@ public class PrinterService : IPrinterService
         return mapped;
     }
 
-    public async Task<List<PrinterDto>> GetAllAsync() => 
+    public async Task<IEnumerable<PrinterDto>> GetAllAsync() => 
         (await _dbContext.Printers.ToListAsync())
-        .Select(_mapper.Map<Printer, PrinterDto>)
-        .ToList();
+        .Select(_mapper.Map<Printer, PrinterDto>);
 
     public async Task UpdateAsync(PrinterDto printer)
     {

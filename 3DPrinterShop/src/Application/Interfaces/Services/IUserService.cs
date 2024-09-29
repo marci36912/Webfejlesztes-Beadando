@@ -8,7 +8,7 @@ public interface IUserService
     
     Task<UserDto> GetAsync(Guid id);
     
-    Task<List<UserDto>> GetAllAsync();
+    Task<IEnumerable<UserDto>> GetAllAsync();
     
     Task UpdateAsync(UserDto user);
     

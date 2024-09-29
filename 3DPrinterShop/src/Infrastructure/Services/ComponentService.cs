@@ -58,10 +58,9 @@ public class ComponentService : IComponentService
         return mapped;
     }
 
-    public async Task<List<ComponentDto>> GetAllAsync() => 
+    public async Task<IEnumerable<ComponentDto>> GetAllAsync() => 
         (await _dbContext.Components.ToListAsync())
-        .Select(_mapper.Map<Component, ComponentDto>)
-        .ToList();
+        .Select(_mapper.Map<Component, ComponentDto>);
 
     public async Task UpdateAsync(ComponentDto component)
     {

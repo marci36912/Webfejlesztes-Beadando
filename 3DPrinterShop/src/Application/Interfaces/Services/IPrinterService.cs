@@ -8,7 +8,7 @@ public interface IPrinterService
     
     Task<PrinterDto> GetAsync(Guid id);
     
-    Task<List<PrinterDto>> GetAllAsync();
+    Task<IEnumerable<PrinterDto>> GetAllAsync();
     
     Task UpdateAsync(PrinterDto printer);
     

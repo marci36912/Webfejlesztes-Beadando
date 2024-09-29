@@ -49,7 +49,7 @@ public class PrinterController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<PrinterDto>>> GetAllAsync()
+    public async Task<ActionResult<IEnumerable<PrinterDto>>> GetAllAsync()
     {
         var result = await _printerService.GetAllAsync();
         

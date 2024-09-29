@@ -49,7 +49,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<OrderDto>>> GetAllAsync()
+    public async Task<ActionResult<IEnumerable<OrderDto>>> GetAllAsync()
     {
         var result = await _orderService.GetAllAsync();
         

@@ -58,10 +58,9 @@ public class UserService : IUserService
         return mapped;
     }
 
-    public async Task<List<UserDto>> GetAllAsync() => 
+    public async Task<IEnumerable<UserDto>> GetAllAsync() => 
         (await _dbContext.Users.ToListAsync())
-        .Select(_mapper.Map<User, UserDto>)
-        .ToList();
+        .Select(_mapper.Map<User, UserDto>);
 
     public async Task UpdateAsync(UserDto user)
     {

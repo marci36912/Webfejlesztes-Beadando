@@ -49,7 +49,7 @@ public class ComponentController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<ComponentDto>>> GetAllAsync()
+    public async Task<ActionResult<IEnumerable<ComponentDto>>> GetAllAsync()
     {
         var result = await _componentService.GetAllAsync();
         

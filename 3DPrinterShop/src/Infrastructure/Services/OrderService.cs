@@ -58,11 +58,9 @@ public class OrderService : IOrderService
         return mapped;
     }
 
-    public async Task<List<OrderDto>> GetAllAsync() => 
+    public async Task<IEnumerable<OrderDto>> GetAllAsync() => 
         (await _dbContext.Orders.ToListAsync())
-        .Select(_mapper.Map<Order, OrderDto>)
-        .ToList();
-
+        .Select(_mapper.Map<Order, OrderDto>);
 
     public async Task UpdateAsync(OrderDto order)
     {
