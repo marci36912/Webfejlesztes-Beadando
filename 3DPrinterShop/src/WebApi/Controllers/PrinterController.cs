@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using PrinterShop.Core.Application.Interfaces.Services;
 using PrinterShop.Shared.Dtos;
 
@@ -18,13 +19,24 @@ public class PrinterController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddAsync([FromBody] PrinterDto printer)
     {
-        await _printerService.AddAsync(printer);
+        try
+        {
+            await _printerService.AddAsync(printer);
+        }
+        catch (ArgumentException e)
+        {
+            return Conflict(e.Message);
+        }
+        catch (ValidationException e)
+        {
+            return Conflict(e.Message);
+        }
         
         return Ok();
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<PrinterDto>> Get(Guid id)
+    public async Task<ActionResult<PrinterDto>> GetAsync(Guid id)
     {
         var result = await _printerService.GetAsync(id);
 
@@ -45,17 +57,37 @@ public class PrinterController : ControllerBase
     }
 
     [HttpPut]
-    public async Task<IActionResult> Update([FromBody] PrinterDto printer)
+    public async Task<IActionResult> UpdateAsync([FromBody] PrinterDto printer)
     {
-        await _printerService.UpdateAsync(printer);
+        try
+        {
+            await _printerService.UpdateAsync(printer);
+        }
+        catch (ArgumentNullException e)
+        {
+            await AddAsync(printer);
+            
+            return Created();
+        }
+        catch (ValidationException e)
+        {
+            return Conflict(e.Message);
+        }
 
         return Ok();
     }
 
     [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<IActionResult> DeleteAsync(Guid id)
     {
-        await _printerService.DeleteAsync(id);
+        try
+        {
+            await _printerService.DeleteAsync(id);
+        }
+        catch (ArgumentNullException e)
+        {
+            return NotFound();
+        }
         
         return Ok();
     }

@@ -79,8 +79,6 @@ public class ComponentService : IComponentService
             throw new ValidationException(validation.Errors);
         }
         
-        
-        
         result.Brand = component.Brand;
         result.Description = component.Description;
         result.Price = component.Price;

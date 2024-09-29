@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using PrinterShop.Core.Application.Interfaces.Services;
 using PrinterShop.Shared.Dtos;
 
@@ -18,13 +19,24 @@ public class OrderController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddAsync([FromBody] OrderDto order)
     {
-        await _orderService.AddAsync(order);
+        try
+        {
+            await _orderService.AddAsync(order);
+        }
+        catch (ArgumentException e)
+        {
+            return Conflict(e.Message);
+        }
+        catch (ValidationException e)
+        {
+            return Conflict(e.Message);
+        }
         
         return Ok();
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<OrderDto>> Get(Guid id)
+    public async Task<ActionResult<OrderDto>> GetAsync(Guid id)
     {
         var result = await _orderService.GetAsync(id);
 
@@ -45,17 +57,37 @@ public class OrderController : ControllerBase
     }
 
     [HttpPut]
-    public async Task<IActionResult> Update([FromBody] OrderDto order)
+    public async Task<IActionResult> UpdateAsync([FromBody] OrderDto order)
     {
-        await _orderService.UpdateAsync(order);
+        try
+        {
+            await _orderService.UpdateAsync(order);
+        }
+        catch (ArgumentNullException e)
+        {
+            await AddAsync(order);
+            
+            return Created();
+        }
+        catch (ValidationException e)
+        {
+            return Conflict(e.Message);
+        }
 
         return Ok();
     }
 
     [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<IActionResult> DeleteAsync(Guid id)
     {
-        await _orderService.DeleteAsync(id);
+        try
+        {
+            await _orderService.DeleteAsync(id);
+        }
+        catch (ArgumentNullException e)
+        {
+            return NotFound();
+        }
         
         return Ok();
     }

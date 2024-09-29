@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using PrinterShop.Core.Application.Interfaces.Services;
 using PrinterShop.Shared.Dtos;
 
@@ -18,13 +19,24 @@ public class UserController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddAsync([FromBody] UserDto user)
     {
-        await _userService.AddAsync(user);
+        try
+        {
+            await _userService.AddAsync(user);
+        }
+        catch (ArgumentException e)
+        {
+            return Conflict(e.Message);
+        }
+        catch (ValidationException e)
+        {
+            return Conflict(e.Message);
+        }
         
         return Ok();
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<UserDto>> Get(Guid id)
+    public async Task<ActionResult<UserDto>> GetAsync(Guid id)
     {
         var result = await _userService.GetAsync(id);
 
@@ -45,17 +57,37 @@ public class UserController : ControllerBase
     }
 
     [HttpPut]
-    public async Task<IActionResult> Update([FromBody] UserDto user)
+    public async Task<IActionResult> UpdateAsync([FromBody] UserDto user)
     {
-        await _userService.UpdateAsync(user);
-
+        try
+        {
+            await _userService.UpdateAsync(user);
+        }
+        catch (ArgumentNullException e)
+        {
+            await AddAsync(user);
+            
+            return Created();
+        }
+        catch (ValidationException e)
+        {
+            return Conflict(e.Message);
+        }
+        
         return Ok();
     }
 
     [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<IActionResult> DeleteAsync(Guid id)
     {
-        await _userService.DeleteAsync(id);
+        try
+        {
+            await _userService.DeleteAsync(id);
+        }
+        catch (ArgumentNullException e)
+        {
+            return NotFound();
+        }
         
         return Ok();
     }
