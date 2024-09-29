@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{9B2F60AE-F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "src\Shared\Shared.csproj", "{D23FA53C-BD57-4007-98FE-944221116873}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebUi", "src\WebUi\WebUi.csproj", "{A153B0BC-B75A-4085-9127-E4022A0A07F1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{D23FA53C-BD57-4007-98FE-944221116873}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D23FA53C-BD57-4007-98FE-944221116873}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D23FA53C-BD57-4007-98FE-944221116873}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A153B0BC-B75A-4085-9127-E4022A0A07F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A153B0BC-B75A-4085-9127-E4022A0A07F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A153B0BC-B75A-4085-9127-E4022A0A07F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A153B0BC-B75A-4085-9127-E4022A0A07F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{11174837-9CE4-4FF5-B816-7314E16A9A4F} = {9B2F60AE-F7FE-4303-8CDE-FA4479A8579C}
