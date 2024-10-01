@@ -1,0 +1,65 @@
+﻿@page "/listusers"
+
+@using PrinterShop.Shared.Dtos
+
+@inject IUserService UserService;
+
+<h3>ListUsers</h3>
+
+@if (_users is null)
+{
+    <p>loading...</p>
+}
+else if (_users.Count == 0)
+{
+    <p>There are no users registered.</p>
+}
+else
+{
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Username</th>
+            <th scope="col">Email</th>
+            <th scope="col">Type</th>
+            <th colspan="2" />
+        </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in _users)
+            {
+                <tr>
+                    <td>@(_index++)</td>
+                    <td>@user.UserName</td>
+                    <td>@user.Email</td>
+                    <td>@user.Type.ToString()</td>
+                    <td>
+                        <a class="btn btn-primary" href="updateuser/@user.Id">Update Details</a>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger" onclick="@(() => DeleteUser(user.Id))">Delete User</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    private List<UserDto> _users;
+    private int _index;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _users = (await UserService.GetAllAsync()).ToList();
+        _index = 1;
+    }
+
+    private async Task DeleteUser(Guid id)
+    {
+        await UserService.DeleteAsync(id);
+    }
+    
+}

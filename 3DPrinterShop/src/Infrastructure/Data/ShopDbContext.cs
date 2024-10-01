@@ -13,6 +13,10 @@ public class ShopDbContext : DbContext
     
     public DbSet<User> Users { get; set; }
 
+    public ShopDbContext()
+    {
+    }
+    
     public ShopDbContext(DbContextOptions<ShopDbContext> options)
         : base(options)
     {
