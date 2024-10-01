@@ -8,8 +8,6 @@ public class ComponentValidator : AbstractValidator<ComponentDto>
     public ComponentValidator()
     {
         RuleFor(x => x.ComponentType)
-            .NotEmpty()
-            .WithMessage("The {PropertyName} is required.")
             .IsInEnum()
             .WithMessage("The {PropertyName} must be from the predetermined types.");
         

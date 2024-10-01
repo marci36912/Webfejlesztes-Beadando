@@ -1,14 +1,21 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Refit;
-using WebUi;
-using WebUi.Services;
+using PrinterShop.WebUi;
+using PrinterShop.WebUi.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.Services.AddRefitClient<IUserService>()
-    .ConfigureHttpClient(c => c.BaseAddress = new Uri("127.0.0.1"));
+var settings = new RefitSettings()
+{
+    ContentSerializer = new SystemTextJsonContentSerializer(),
+};
+
+builder.Services.AddRefitClient<IUserService>(settings)
+    .ConfigureHttpClient(c => c.BaseAddress = new Uri("https://localhost:5001/"));
 
 await builder.Build().RunAsync();

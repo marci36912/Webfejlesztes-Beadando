@@ -8,8 +8,6 @@ public class UserValidator : AbstractValidator<UserDto>
     public UserValidator()
     {
         RuleFor(x => x.Type)
-            .NotEmpty()
-            .WithMessage("The {PropertyName} is required.")
             .IsInEnum()
             .WithMessage("The {PropertyName} must be from the predetermined types.");
         

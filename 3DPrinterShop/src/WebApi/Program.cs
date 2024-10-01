@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using PrinterShop.Core.Application;
 using PrinterShop.Core.Infrastructure;
 
@@ -9,7 +10,16 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(x =>
+{
+    x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
+
+builder.Services.AddCors(x => x.AddPolicy("AllowAnything", 
+    policy => policy
+        .AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod()));
 
 var app = builder.Build();
 
@@ -20,8 +30,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapControllers();
+app.UseCors("AllowAnything");
 
-app.UseHttpsRedirection();
+app.MapControllers();
 
 app.Run();

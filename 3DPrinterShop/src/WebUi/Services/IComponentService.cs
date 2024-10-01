@@ -1,7 +1,7 @@
 ﻿using PrinterShop.Shared.Dtos;
 using Refit;
 
-namespace WebUi.Services;
+namespace PrinterShop.WebUi.Services;
 
 [Headers("Content-Type: application/json")]
 public interface IComponentService
