@@ -64,7 +64,7 @@ public class ComponentService : IComponentService
 
     public async Task UpdateAsync(ComponentDto component)
     {
-        var result = await GetAsync(component.ModelNumber);
+        var result = await _dbContext.FindAsync<Component>(component.ModelNumber);
 
         if (result is null)
         {

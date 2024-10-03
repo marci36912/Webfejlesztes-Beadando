@@ -64,7 +64,7 @@ public class UserService : IUserService
 
     public async Task UpdateAsync(UserDto user)
     {
-        var result = await GetAsync(user.Id);
+        var result = await _dbContext.FindAsync<User>(user.Id);
 
         if (result is null)
         {

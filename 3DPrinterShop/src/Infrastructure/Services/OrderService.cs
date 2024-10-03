@@ -64,7 +64,7 @@ public class OrderService : IOrderService
 
     public async Task UpdateAsync(OrderDto order)
     {
-        var result = await GetAsync(order.Id);
+        var result = await _dbContext.FindAsync<Order>(order.Id);
 
         if (result is null)
         {

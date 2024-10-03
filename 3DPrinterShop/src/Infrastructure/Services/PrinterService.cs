@@ -64,7 +64,7 @@ public class PrinterService : IPrinterService
 
     public async Task UpdateAsync(PrinterDto printer)
     {
-        var result = await GetAsync(printer.Id);
+        var result = await _dbContext.FindAsync<Printer>(printer.Id);
 
         if (result is null)
         {
