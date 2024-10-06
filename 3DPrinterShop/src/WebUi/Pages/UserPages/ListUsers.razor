@@ -3,8 +3,11 @@
 @using PrinterShop.Shared.Dtos
 
 @inject IUserService UserService;
+@inject NavigationManager NavigationManager;
 
 <h3>ListUsers</h3>
+
+<a href="adduser" class="btn btn-danger my-2">Add new user</a>
 
 @if (_users is null)
 {
@@ -60,6 +63,7 @@ else
     private async Task DeleteUser(Guid id)
     {
         await UserService.DeleteAsync(id);
+        NavigationManager.Refresh();
     }
     
 }

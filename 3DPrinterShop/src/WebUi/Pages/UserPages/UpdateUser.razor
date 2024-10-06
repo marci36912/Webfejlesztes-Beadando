@@ -5,6 +5,7 @@
 @using PrinterShop.Shared.Enums
 
 @inject IUserService UserService;
+@inject NavigationManager NavigationManager;
 
 <h3>Update User</h3>
 
@@ -14,7 +15,7 @@
 }
 else
 {
-    <EditForm Model="_user" OnSubmit="UpdateUserAsync">
+    <EditForm Model="_user" OnInvalidSubmit="UpdateUserAsync">
         <FluentValidationValidator/>
         <div class="form-group">
             <label for="username">User Name</label>
@@ -31,8 +32,8 @@ else
             <InputText id="password" @bind-Value="_user.Password" class="form-control"></InputText>
             <ValidationMessage For="() => _user.Password"/>
         </div>
-        <div class="form-control">
-            <label for="usertype">User type</label>
+        <div class="input-group">
+            <label for="usertype" class="input-group-text">User type</label>
             <InputSelect id="usertype" @bind-Value="_user.Type">
                 @foreach (var type in Enum.GetValues(typeof(UserType)))
                 {
@@ -48,7 +49,7 @@ else
             </InputSelect>
         </div>
         <div class="form-group">
-            <button type="submit" class="btn btn-secondary">Update User</button>
+            <button type="submit" class="btn btn-secondary my-2">Update User</button>
         </div>
     </EditForm>
 }
@@ -63,6 +64,8 @@ else
     private async Task UpdateUserAsync()
     {
         await UserService.UpdateAsync(_user);
+        
+        NavigationManager.NavigateTo("listusers");
     }
 
     protected override async Task OnInitializedAsync()
