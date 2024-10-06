@@ -1,0 +1,73 @@
+﻿@page "/listcomponents"
+
+@using PrinterShop.Shared.Dtos
+
+@inject IComponentService ComponentService;
+@inject NavigationManager NavigationManager;
+
+<h3>List of Components</h3>
+
+<a href="addcomponent" class="btn btn-danger my-2">Add new component</a>
+
+@if (_components is null)
+{
+    <p>loading...</p>
+}
+else if (_components.Count == 0)
+{
+    <p>There are no components registered.</p>
+}
+else
+{
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Type</th>
+            <th scope="col">Brand</th>
+            <th scope="col">Model</th>
+            <th scope="col">Price</th>
+            <th scope="col">Description</th>
+            <th colspan="2" />
+        </tr>
+        </thead>
+        <tbody>
+            @foreach (var component in _components)
+            {
+                <tr>
+                    <td>@(_index++)</td>
+                    <td>@component.ComponentType.ToString()</td>
+                    <td>@component.Brand</td>
+                    <td>@component.Model</td>
+                    <td>@component.Price</td>
+                    <td>@component.Description</td>
+                    <td>
+                        <a class="btn btn-primary" href="updatecomponent/@component.ModelNumber">Update Component</a>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger" onclick="@(() => DeleteComponent(component.ModelNumber))">Delete Component</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    private List<ComponentDto> _components;
+    private int _index;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _components = (await ComponentService.GetAllAsync()).ToList();
+        _index = 1;
+    }
+
+    private async Task DeleteComponent(Guid id)
+    {
+        await ComponentService.DeleteAsync(id);
+        NavigationManager.Refresh();
+    }
+    
+}

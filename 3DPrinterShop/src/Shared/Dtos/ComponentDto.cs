@@ -4,7 +4,7 @@ namespace PrinterShop.Shared.Dtos;
 
 public class ComponentDto
 {
-    public Guid ModelNumber { get; set; }
+    public Guid ModelNumber { get; init; }
     
     public ComponentType ComponentType { get; set; }
     

@@ -1,0 +1,81 @@
+﻿@page "/updatecomponent/{id:guid}"
+
+@using PrinterShop.Shared.Dtos
+@using Blazored.FluentValidation
+@using PrinterShop.Shared.Enums
+
+@inject IComponentService ComponentService;
+@inject NavigationManager NavigationManager;
+
+<h3>Update Component</h3>
+
+@if (_component is null)
+{
+    <p>loading...</p>
+}
+else
+{
+    <EditForm Model="_component" OnValidSubmit="UpdateComponentAsync">
+        <FluentValidationValidator  />
+        <div class="form-group">
+            <label for="componenttype">Component Type</label>
+            <InputSelect id="componenttype" @bind-Value="_component.ComponentType">
+                @foreach (var type in Enum.GetValues(typeof(ComponentType)))
+                {
+                    if ((ComponentType)type == _component.ComponentType)
+                    {
+                        <option value="@type" selected>@type.ToString()</option>    
+                    }
+                    else
+                    {
+                        <option value="@type">@type.ToString()</option>
+                    }
+                }
+            </InputSelect>
+        </div>
+        <div class="form-group">
+            <label for="brand">Brand</label>
+            <InputText id="brand" @bind-Value="_component.Brand" class="form-control"></InputText>
+            <ValidationMessage For="() => _component.Brand" />
+        </div>
+        <div class="form-group">
+            <label for="model">Model</label>
+            <InputText id="model" @bind-Value="_component.Model" class="form-control"></InputText>
+            <ValidationMessage For="() => _component.Model" />
+        </div>
+        <div class="form-group">
+            <label for="price">Price</label>
+            <InputNumber id="price" @bind-Value="_component.Price" class="form-control"></InputNumber>
+            <ValidationMessage For="() => _component.Price" />
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <InputText id="description" @bind-Value="_component.Description" class="form-control"></InputText>
+            <ValidationMessage For="() => _component.Description" />
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-secondary my-2">Update Component</button>
+        </div>
+    </EditForm>
+}
+
+@code {
+
+    [Parameter] 
+    public Guid Id { get; set; }
+
+    private ComponentDto _component;
+
+    private async Task UpdateComponentAsync()
+    {
+        await ComponentService.UpdateAsync(_component);
+        
+        NavigationManager.NavigateTo("listcomponents");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _component = await ComponentService.GetAsync(Id);
+    }
+
+}

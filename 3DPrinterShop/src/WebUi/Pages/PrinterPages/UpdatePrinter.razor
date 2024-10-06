@@ -1,0 +1,105 @@
+﻿@page "/updateprinter/{id:guid}"
+
+@using PrinterShop.Shared.Dtos
+@using Blazored.FluentValidation
+@using PrinterShop.Shared.Enums
+
+@inject IComponentService ComponentService;
+@inject IPrinterService PrinterService;
+@inject NavigationManager NavigationManager;
+
+<h3>Update Printer</h3>
+
+@if (_printer is null)
+{
+    <p>loading...</p>
+}
+else
+{
+<EditForm Model="_printer" OnValidSubmit="UpdatePrinterAsync">
+    <FluentValidationValidator  />
+    <div class="form-group">
+        <label for="brand">Brand</label>
+        <InputText id="brand" @bind-Value="_printer.Brand" class="form-control"></InputText>
+        <ValidationMessage For="() => _printer.Brand" />
+    </div>
+    <div class="form-group">
+        <label for="model">Model</label>
+        <InputText id="model" @bind-Value="_printer.Model" class="form-control"></InputText>
+        <ValidationMessage For="() => _printer.Model" />
+    </div>
+    <div class="form-group">
+        <label for="mainboard">Mainboard</label>
+        <InputSelect id="mainboard" @bind-Value="_printer.MainBoard">
+            @foreach (var mainboard in (_components.Where(x => x.ComponentType == ComponentType.MainBoard)))
+            {
+                <option value="@mainboard.ModelNumber">@mainboard.Brand : @mainboard.Model</option>
+            }
+        </InputSelect>
+    </div>
+    <div class="form-group">
+        <label for="steppermotor">Stepper Motor</label>
+        <InputSelect id="steppermotor" @bind-Value="_printer.StepperMotor">
+            @foreach (var steppermotor in (_components.Where(x => x.ComponentType == ComponentType.StepperMotor)))
+            {
+                <option value="@steppermotor.ModelNumber">@steppermotor.Brand : @steppermotor.Model</option>
+            }
+        </InputSelect>
+    </div>
+    <div class="form-group">
+        <label for="extruder">Extruder</label>
+        <InputSelect id="extruder" @bind-Value="_printer.Extruder">
+            @foreach (var extruder in (_components.Where(x => x.ComponentType == ComponentType.Extruder)))
+            {
+                <option value="@extruder.ModelNumber">@extruder.Brand : @extruder.Model</option>
+            }
+        </InputSelect>
+    </div>
+    <div class="form-group">
+        <label for="heatingbed">Heating Bed</label>
+        <InputSelect id="heatingbed" @bind-Value="_printer.HeatingBed">
+            @foreach (var heatingbad in (_components.Where(x => x.ComponentType == ComponentType.HeatingBed)))
+            {
+                <option value="@heatingbad.ModelNumber">@heatingbad.Brand : @heatingbad.Model</option>
+            }
+        </InputSelect>
+    </div>
+    <div class="form-group">
+        <label for="sensor">Bed Leveling Sensor</label>
+        <InputSelect id="sensor" @bind-Value="_printer.BedLevelingSensor">
+            @foreach (var sensor in (_components.Where(x => x.ComponentType == ComponentType.BedLevelingSensor)))
+            {
+            <option value="@sensor.ModelNumber">@sensor.Brand : @sensor.Model</option>
+            }
+        </InputSelect>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-secondary my-2">Create Printer</button>
+    </div>
+</EditForm>
+
+}
+
+@code {
+
+    [Parameter] 
+    public Guid Id { get; set; }
+
+    private List<ComponentDto> _components;
+
+    private PrinterDto _printer;
+
+    private async Task UpdatePrinterAsync()
+    {
+        await PrinterService.UpdateAsync(_printer);
+        
+        NavigationManager.NavigateTo("listprinters");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _printer = await PrinterService.GetAsync(Id);
+        _components = (await ComponentService.GetAllAsync()).ToList();
+    }
+
+}

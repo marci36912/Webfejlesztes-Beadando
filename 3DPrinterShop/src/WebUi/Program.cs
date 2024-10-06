@@ -18,4 +18,16 @@ var settings = new RefitSettings()
 builder.Services.AddRefitClient<IUserService>(settings)
     .ConfigureHttpClient(c => c.BaseAddress = new Uri("https://localhost:5001/"));
 
+
+builder.Services.AddRefitClient<IComponentService>(settings)
+    .ConfigureHttpClient(c => c.BaseAddress = new Uri("https://localhost:5001/"));
+
+
+builder.Services.AddRefitClient<IOrderService>(settings)
+    .ConfigureHttpClient(c => c.BaseAddress = new Uri("https://localhost:5001/"));
+
+
+builder.Services.AddRefitClient<IPrinterService>(settings)
+    .ConfigureHttpClient(c => c.BaseAddress = new Uri("https://localhost:5001/"));
+
 await builder.Build().RunAsync();
