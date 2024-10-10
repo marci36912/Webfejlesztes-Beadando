@@ -1,0 +1,76 @@
+﻿@page "/updateorder/{id:guid}"
+
+@using PrinterShop.Shared.Dtos
+@using Blazored.FluentValidation
+@using PrinterShop.Shared.Enums
+
+@inject IUserService UserService;
+@inject NavigationManager NavigationManager;
+
+<h3>Update User</h3>
+
+@if (_user is null)
+{
+    <p>loading...</p>
+}
+else
+{
+    <EditForm Model="_user" OnInvalidSubmit="UpdateUserAsync">
+        <FluentValidationValidator/>
+        <div class="form-group">
+            <label for="username">User Name</label>
+            <InputText id="username" @bind-Value="_user.UserName" class="form-control"></InputText>
+            <ValidationMessage For="() => _user.UserName"/>
+        </div>
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <InputText id="email" @bind-Value="_user.Email" class="form-control"></InputText>
+            <ValidationMessage For="() => _user.Email"/>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <InputText id="password" @bind-Value="_user.Password" class="form-control"></InputText>
+            <ValidationMessage For="() => _user.Password"/>
+        </div>
+        <div class="input-group">
+            <label for="usertype" class="input-group-text">User type</label>
+            <InputSelect id="usertype" @bind-Value="_user.Type">
+                @foreach (var type in Enum.GetValues(typeof(UserType)))
+                {
+                    if ((UserType)type == _user.Type)
+                    {
+                        <option value="@type" selected>@type.ToString()</option>   
+                    }
+                    else
+                    {
+                        <option value="@type">@type.ToString()</option>
+                    }
+                }
+            </InputSelect>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-secondary my-2">Update User</button>
+        </div>
+    </EditForm>
+}
+
+@code {
+
+    [Parameter] 
+    public Guid Id { get; set; }
+
+    private UserDto _user;
+
+    private async Task UpdateUserAsync()
+    {
+        await UserService.UpdateAsync(_user);
+        
+        NavigationManager.NavigateTo("listusers");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _user = await UserService.GetAsync(Id);
+    }
+
+}
