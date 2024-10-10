@@ -8,7 +8,7 @@
 
 <h3>List Printers</h3>
 
-<a href="adduser" class="btn btn-danger my-2">Add new printer</a>
+<a href="addprinter" class="btn btn-danger my-2">Add new printer</a>
 
 @if (_printers is null)
 {
@@ -16,7 +16,7 @@
 }
 else if (_printers.Count == 0)
 {
-    <p>There are no users registered.</p>
+    <p>There are no printers.</p>
 }
 else
 {

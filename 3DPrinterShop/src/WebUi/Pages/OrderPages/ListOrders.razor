@@ -2,18 +2,18 @@
 
 @using PrinterShop.Shared.Dtos
 
-@inject IUserService UserService;
+@inject IOrderService OrderService;
 @inject NavigationManager NavigationManager;
 
-<h3>ListUsers</h3>
+<h3>List Orders</h3>
 
-<a href="adduser" class="btn btn-danger my-2">Add new user</a>
+<a href="addorder" class="btn btn-danger my-2">Add new order</a>
 
-@if (_users is null)
+@if (_orders is null)
 {
     <p>loading...</p>
 }
-else if (_users.Count == 0)
+else if (_orders.Count == 0)
 {
     <p>There are no users registered.</p>
 }
@@ -23,20 +23,20 @@ else
         <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">Username</th>
-            <th scope="col">Email</th>
+            <th scope="col">Printer</th>
+            <th scope="col">Customer</th>
             <th scope="col">Type</th>
             <th colspan="2" />
         </tr>
         </thead>
         <tbody>
-            @foreach (var user in _users)
+            @foreach (var user in _orders)
             {
                 <tr>
                     <td>@(_index++)</td>
-                    <td>@user.UserName</td>
-                    <td>@user.Email</td>
-                    <td>@user.Type.ToString()</td>
+                    <td>@user</td>
+                    <td>@user</td>
+                    <td>@user.ToString()</td>
                     <td>
                         <a class="btn btn-primary" href="updateuser/@user.Id">Update Details</a>
                     </td>
@@ -51,18 +51,18 @@ else
 
 @code {
 
-    private List<UserDto> _users;
+    private List<OrderDto> _orders;
     private int _index;
 
     protected override async Task OnInitializedAsync()
     {
-        _users = (await UserService.GetAllAsync()).ToList();
+        _orders = (await OrderService.GetAllAsync()).ToList();
         _index = 1;
     }
 
     private async Task DeleteUser(Guid id)
     {
-        await UserService.DeleteAsync(id);
+        await OrderService.DeleteAsync(id);
         NavigationManager.Refresh();
     }
     
