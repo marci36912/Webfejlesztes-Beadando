@@ -3,11 +3,12 @@
 @using PrinterShop.Shared.Dtos
 
 @inject IUserService UserService;
+@inject IOrderService OrderService;
 @inject NavigationManager NavigationManager;
 
-<h3>ListUsers</h3>
+<h3>List of Orders</h3>
 
-<a href="adduser" class="btn btn-danger my-2">Add new user</a>
+<a href="addorder" class="btn btn-danger my-2">Add new user</a>
 
 @if (_users is null)
 {
@@ -51,18 +52,18 @@ else
 
 @code {
 
-    private List<UserDto> _users;
+    private List<OrderDto> _orders;
     private int _index;
 
     protected override async Task OnInitializedAsync()
     {
-        _users = (await UserService.GetAllAsync()).ToList();
+        _orders = (await OrderService.GetAllAsync()).ToList();
         _index = 1;
     }
 
-    private async Task DeleteUser(Guid id)
+    private async Task DeleteOrder(Guid id)
     {
-        await UserService.DeleteAsync(id);
+        await OrderService.DeleteAsync(id);
         NavigationManager.Refresh();
     }
     

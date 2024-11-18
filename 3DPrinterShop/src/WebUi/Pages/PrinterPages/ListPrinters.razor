@@ -8,7 +8,7 @@
 
 <h3>List Printers</h3>
 
-<a href="adduser" class="btn btn-danger my-2">Add new printer</a>
+<a href="addprinter" class="btn btn-danger my-2">Add new printer</a>
 
 @if (_printers is null)
 {
@@ -16,7 +16,7 @@
 }
 else if (_printers.Count == 0)
 {
-    <p>There are no users registered.</p>
+    <p>There are no printers registered.</p>
 }
 else
 {
@@ -50,7 +50,7 @@ else
                         <a class="btn btn-primary" href="updateprinter/@printer.Id">Update Details</a>
                     </td>
                     <td>
-                        <button class="btn btn-danger" onclick="@(() => DeletePrinter(printer.Id))">Delete User</button>
+                        <button class="btn btn-danger" onclick="@(() => DeletePrinter(printer.Id))">Delete Printer</button>
                     </td>
                 </tr>
             }
