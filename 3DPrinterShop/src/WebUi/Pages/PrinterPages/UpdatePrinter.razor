@@ -30,7 +30,7 @@ else
     </div>
     <div class="form-group">
         <label for="mainboard">Mainboard</label>
-        <InputSelect id="mainboard" @bind-Value="_printer.MainBoard">
+        <InputSelect id="mainboard" @bind-Value="_printer.MainBoard" class="form-control">
             @foreach (var mainboard in (_components.Where(x => x.ComponentType == ComponentType.MainBoard)))
             {
                 <option value="@mainboard.ModelNumber">@mainboard.Brand : @mainboard.Model</option>
@@ -39,7 +39,7 @@ else
     </div>
     <div class="form-group">
         <label for="steppermotor">Stepper Motor</label>
-        <InputSelect id="steppermotor" @bind-Value="_printer.StepperMotor">
+        <InputSelect id="steppermotor" @bind-Value="_printer.StepperMotor" class="form-control">
             @foreach (var steppermotor in (_components.Where(x => x.ComponentType == ComponentType.StepperMotor)))
             {
                 <option value="@steppermotor.ModelNumber">@steppermotor.Brand : @steppermotor.Model</option>
@@ -48,7 +48,7 @@ else
     </div>
     <div class="form-group">
         <label for="extruder">Extruder</label>
-        <InputSelect id="extruder" @bind-Value="_printer.Extruder">
+        <InputSelect id="extruder" @bind-Value="_printer.Extruder" class="form-control">
             @foreach (var extruder in (_components.Where(x => x.ComponentType == ComponentType.Extruder)))
             {
                 <option value="@extruder.ModelNumber">@extruder.Brand : @extruder.Model</option>
@@ -57,7 +57,7 @@ else
     </div>
     <div class="form-group">
         <label for="heatingbed">Heating Bed</label>
-        <InputSelect id="heatingbed" @bind-Value="_printer.HeatingBed">
+        <InputSelect id="heatingbed" @bind-Value="_printer.HeatingBed" class="form-control">
             @foreach (var heatingbad in (_components.Where(x => x.ComponentType == ComponentType.HeatingBed)))
             {
                 <option value="@heatingbad.ModelNumber">@heatingbad.Brand : @heatingbad.Model</option>
@@ -66,7 +66,7 @@ else
     </div>
     <div class="form-group">
         <label for="sensor">Bed Leveling Sensor</label>
-        <InputSelect id="sensor" @bind-Value="_printer.BedLevelingSensor">
+        <InputSelect id="sensor" @bind-Value="_printer.BedLevelingSensor" class="form-control">
             @foreach (var sensor in (_components.Where(x => x.ComponentType == ComponentType.BedLevelingSensor)))
             {
             <option value="@sensor.ModelNumber">@sensor.Brand : @sensor.Model</option>

@@ -15,7 +15,7 @@
 }
 else
 {
-    <EditForm Model="_user" OnInvalidSubmit="UpdateUserAsync">
+    <EditForm Model="_user" OnValidSubmit="UpdateUserAsync">
         <FluentValidationValidator/>
         <div class="form-group">
             <label for="username">User Name</label>
@@ -32,9 +32,9 @@ else
             <InputText id="password" @bind-Value="_user.Password" class="form-control"></InputText>
             <ValidationMessage For="() => _user.Password"/>
         </div>
-        <div class="input-group">
-            <label for="usertype" class="input-group-text">User type</label>
-            <InputSelect id="usertype" @bind-Value="_user.Type">
+        <div class="form-group">
+            <label for="usertype">User type</label>
+            <InputSelect id="usertype" @bind-Value="_user.Type" class="form-control">
                 @foreach (var type in Enum.GetValues(typeof(UserType)))
                 {
                     if ((UserType)type == _user.Type)

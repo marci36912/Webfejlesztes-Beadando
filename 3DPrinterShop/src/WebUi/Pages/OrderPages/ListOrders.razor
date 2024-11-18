@@ -1,11 +1,9 @@
 ﻿@page "/listorders"
 
-@using PrinterShop.Shared.Dtos
-
 @inject IOrderService OrderService;
 @inject NavigationManager NavigationManager;
 
-<h3>List Orders</h3>
+<h3>List of Orders</h3>
 
 <a href="addorder" class="btn btn-danger my-2">Add new order</a>
 
@@ -15,7 +13,7 @@
 }
 else if (_orders.Count == 0)
 {
-    <p>There are no users registered.</p>
+    <p>There are no orders.</p>
 }
 else
 {

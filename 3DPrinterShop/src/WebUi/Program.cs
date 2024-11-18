@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.FluentUI.AspNetCore.Components;
 using Refit;
 using PrinterShop.WebUi;
 using PrinterShop.WebUi.Services;
@@ -12,6 +13,11 @@ var settings = new RefitSettings()
 {
     ContentSerializer = new SystemTextJsonContentSerializer(),
 };
+
+builder.Services.AddSingleton( new LibraryConfiguration()
+{
+    CollocatedJavaScriptQueryString = null,
+});
 
 builder.Services.AddRefitClient<IUserService>(settings)
     .ConfigureHttpClient(c => c.BaseAddress = new Uri("https://localhost:5001/"));

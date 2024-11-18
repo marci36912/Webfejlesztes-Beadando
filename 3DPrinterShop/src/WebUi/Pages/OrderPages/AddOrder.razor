@@ -3,43 +3,79 @@
 @using PrinterShop.Shared.Dtos
 @using Blazored.FluentValidation
 @using PrinterShop.Shared.Enums
+@using Microsoft.FluentUI.AspNetCore.Components
 
 @inject IUserService UserService;
+@inject IPrinterService PrinterService;
+@inject IComponentService ComponentService;
 @inject NavigationManager NavigationManager;
 
 <h3>AddUser</h3>
 
-<EditForm Model="_user" OnValidSubmit="CreateUserAsync">
-    <FluentValidationValidator  />
-    <div class="form-group">
-        <label for="username">User Name</label>
-        <InputText id="username" @bind-Value="_user.UserName" class="form-control"></InputText>
-        <ValidationMessage For="() => _user.UserName" />
-    </div>
-    <div class="form-group">
-        <label for="email">Email Address</label>
-        <InputText id="email" @bind-Value="_user.Email" class="form-control"></InputText>
-        <ValidationMessage For="() => _user.Email" />
-    </div>
-    <div class="form-group">
-        <label for="password">Password</label>
-        <InputText id="password" @bind-Value="_user.Password" class="form-control"></InputText>
-        <ValidationMessage For="() => _user.Password" />
-    </div>
-    <div class="form-group">
-        <button type="submit" class="btn btn-secondary my-2">Create User</button>
-    </div>
-</EditForm>
+@if (_users is not null && _printers is not null && _components is not null)
+{
+    <EditForm Model="_order" OnValidSubmit="CreateOrderAsync">
+        <FluentValidationValidator/>
+        <div class="form-group">
+            <label for="username">User</label>
+            <InputSelect id="username" @bind-Value="_order.CustomerId" class="form-control">
+                @foreach (var user in _users)
+                {
+                    <option value="@user.Id">@user.UserName</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="() => _order.CustomerId"/>
+        </div>
+        <div class="form-group">
+            <label for="printer">Printer</label>
+            <InputSelect id="email" @bind-Value="_order.PrinterId" class="form-control">
+                @foreach (var printer in _printers)
+                {
+                    <option value="@printer.Id">@GetPrinterName(printer)</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="() => _order.PrinterId"/>
+        </div>
+        <div class="form-group">
+            <FluentSelect TOption="ComponentDto"
+                          Label="Select components:"
+                          Items="@_components"
+                          Id="component-box"
+                          Multiple="true"
+                          OptionValue="@(p => p.ModelNumber.ToString())"
+                          OptionText="@(p => p.Brand + ", " + p.Model)"
+                          @bind-SelectedOptions="@_selectedOptions"
+                          Appearance="Appearance.Stealth"/>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-secondary my-2">Create User</button>
+        </div>
+    </EditForm>
+}
 
 @code {
 
-    private UserDto _user = new();
+    private OrderDto _order = new();
+    private List<UserDto> _users;
+    private List<PrinterDto> _printers;
+    private IEnumerable<ComponentDto> _components;
+    private IEnumerable<ComponentDto> _selectedOptions;
 
-    private async Task CreateUserAsync()
+    protected override async Task OnInitializedAsync()
     {
-        await UserService.AddAsync(_user);
-        
-        NavigationManager.NavigateTo("listusers");
+        _users = (await UserService.GetAllAsync()).ToList();
+        _printers = (await PrinterService.GetAllAsync()).ToList();
+        _components = await ComponentService.GetAllAsync();
     }
-    
+
+    private string GetPrinterName(PrinterDto printer)
+    {
+        return $"{printer.Brand} : {printer.Model}";
+    }
+
+    private Task CreateOrderAsync()
+    {
+        throw new NotImplementedException();
+    }
+
 }
