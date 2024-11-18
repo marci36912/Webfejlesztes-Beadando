@@ -13,7 +13,7 @@
     <FluentValidationValidator  />
     <div class="form-group">
         <label for="componenttype">Component Type</label>
-        <InputSelect id="componenttype" @bind-Value="_component.ComponentType">
+        <InputSelect id="componenttype" @bind-Value="_component.ComponentType" class="form-control">
             @foreach (var type in Enum.GetValues(typeof(ComponentType)))
             {
                 <option value="@type">@type.ToString()</option>
