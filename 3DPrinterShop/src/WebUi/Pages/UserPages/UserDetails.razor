@@ -1,0 +1,125 @@
+﻿@page "/userdetails/{id:guid}"
+
+@inject IUserService UserService;
+@inject IOrderService OrderService;
+@inject IComponentService ComponentService;
+@inject IPrinterService PrinterService;
+@inject NavigationManager NavigationManager;
+
+<h3>UserDetails</h3>
+
+@if (_user is null)
+{
+    <p>loading...</p>
+}
+else
+{
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Username</th>
+                <th scope="col">Email</th>
+                <th scope="col">Type</th>
+                <th colspan="2"/>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@_user.UserName</td>
+                <td>@_user.Email</td>
+                <td>@_user.Type.ToString()</td>
+                <td>
+                    <a class="btn btn-primary" href="updateuser/@_user.Id">Update Details</a>
+                </td>
+                <td>
+                    <button class="btn btn-danger" onclick="@(() => DeleteUser(_user.Id))">Delete User</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <h2 class="my-2">Orders</h2>
+    <ul class="list-group list-group-flush">
+        @foreach (var order in _orders)
+        {
+            <li class="list-group-item my-2">
+                <table class="table table-borderless mb-1">
+                    <thead>
+                    <tr>
+                        <th scope="col"># Printer</th>
+                        <th scope="col">Brand</th>
+                        <th scope="col">Model</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">@(_orderIndex++)</th>
+                        @if (_printers.FirstOrDefault(x => x.Id == order.PrinterId) is PrinterDto printer)
+                        {
+                            <td>@printer.Brand</td>
+                            <td>@printer.Model</td>
+                        }
+                        else
+                        {
+                            <td colspan="2">3D Printer not ordered...</td>
+                        }
+                    </tr>
+                    </tbody>
+                </table>
+                <table class="table table-borderless my-2">
+                    <thead>
+                    <tr>
+                        <th scope="col">Brand</th>
+                        <th scope="col">Model</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Type</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var componentId in order.Components)
+                    {
+                        @if (_components.FirstOrDefault(x => x.ModelNumber == componentId) is ComponentDto component)
+                        {
+                            <tr>
+                                <td>@component.Brand</td>
+                                <td>@component.Model</td>
+                                <td>@component.Price</td>
+                                <td>@component.ComponentType.ToString()</td>
+                            </tr>
+                        }
+                    }
+                    </tbody>
+                </table>
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    
+    [Parameter] 
+    public Guid Id { get; set; }
+
+    private UserDto _user;
+    private List<OrderDto> _orders;
+    private List<ComponentDto> _components;
+    private List<PrinterDto> _printers;
+    private int _orderIndex;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _user = await UserService.GetAsync(Id);
+        _orders = (await OrderService.GetAllAsync())
+            .Where(x => x.CustomerId == Id)
+            .ToList();
+        _components = (await ComponentService.GetAllAsync()).ToList();
+        _printers = (await PrinterService.GetAllAsync()).ToList();
+        _orderIndex = 1;
+    }
+    
+    private async Task DeleteUser(Guid id)
+    {
+        await UserService.DeleteAsync(id);
+        NavigationManager.Refresh();
+    }
+
+}
