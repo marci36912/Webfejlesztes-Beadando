@@ -1,6 +1,9 @@
 ﻿@page "/listorders"
 
 @inject IOrderService OrderService;
+@inject IPrinterService PrinterService;
+@inject IUserService UserService;
+@inject IComponentService ComponentService;
 @inject NavigationManager NavigationManager;
 
 <h3>List of Orders</h3>
@@ -23,25 +26,29 @@ else
             <th scope="col">#</th>
             <th scope="col">Printer</th>
             <th scope="col">Customer</th>
-            <th scope="col">Type</th>
-            <th colspan="2" />
+            <th />
         </tr>
         </thead>
         <tbody>
-            @foreach (var user in _orders)
+            @foreach (var order in _orders)
             {
                 <tr>
                     <td>@(_index++)</td>
-                    <td>@user</td>
-                    <td>@user</td>
-                    <td>@user.ToString()</td>
+                    <td>@GetPrinterName(order.PrinterId)</td>
+                    <td>@GetCostumerName(order.CustomerId)</td>
                     <td>
-                        <a class="btn btn-primary" href="updateuser/@user.Id">Update Details</a>
-                    </td>
-                    <td>
-                        <button class="btn btn-danger" onclick="@(() => DeleteUser(user.Id))">Delete User</button>
+                        <button class="btn btn-danger" onclick="@(() => DeleteOrder(order.Id))">Delete Order</button>
                     </td>
                 </tr>
+                @if (order.Components is not null)
+                {
+                    <ul class="list-group list-group-flush">
+                        @foreach (var item in order.Components)
+                        {
+                            <li class="list-group-item">@GetComponentName(item)</li>
+                        }
+                    </ul>
+                }
             }
         </tbody>
     </table>
@@ -50,18 +57,45 @@ else
 @code {
 
     private List<OrderDto> _orders;
+    private List<UserDto> _users;
+    private List<PrinterDto> _printers;
+    private List<ComponentDto> _components;
     private int _index;
 
     protected override async Task OnInitializedAsync()
     {
         _orders = (await OrderService.GetAllAsync()).ToList();
+        _users = (await UserService.GetAllAsync()).ToList();
+        _printers = (await PrinterService.GetAllAsync()).ToList();
+        _components = (await ComponentService.GetAllAsync()).ToList();
         _index = 1;
     }
 
-    private async Task DeleteUser(Guid id)
+    private async Task DeleteOrder(Guid id)
     {
         await OrderService.DeleteAsync(id);
         NavigationManager.Refresh();
+    }
+
+    private string GetPrinterName(Guid id)
+    {
+        var printer = _printers.FirstOrDefault(x => x.Id == id);
+
+        return printer is null ? "unknown" : $"{printer.Brand} : {printer.Model}";
+    }
+
+    private string GetCostumerName(Guid id)
+    {
+        var costumer = _users.FirstOrDefault(x => x.Id == id);
+
+        return costumer is null ? "unknown" : costumer.UserName;
+    }
+
+    private string GetComponentName(Guid id)
+    {
+        var item = _components.FirstOrDefault(x => x.ModelNumber == id);
+
+        return item is null ? "unknown" : $"{item.Brand} : {item.Model}";
     }
     
 }

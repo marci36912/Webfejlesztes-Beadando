@@ -8,14 +8,18 @@
 @inject IUserService UserService;
 @inject IPrinterService PrinterService;
 @inject IComponentService ComponentService;
+@inject IOrderService OrderService;
 @inject NavigationManager NavigationManager;
 
-<h3>AddUser</h3>
+<h3>New Order</h3>
 
 @if (_users is not null && _printers is not null && _components is not null)
 {
     <EditForm Model="_order" OnValidSubmit="CreateOrderAsync">
         <FluentValidationValidator/>
+        <div class="form-group">
+            <button type="submit" class="btn btn-secondary my-2">Create Order</button>
+        </div>
         <div class="form-group">
             <label for="username">User</label>
             <InputSelect id="username" @bind-Value="_order.CustomerId" class="form-control">
@@ -28,7 +32,7 @@
         </div>
         <div class="form-group">
             <label for="printer">Printer</label>
-            <InputSelect id="email" @bind-Value="_order.PrinterId" class="form-control">
+            <InputSelect id="printer" @bind-Value="_order.PrinterId" class="form-control">
                 @foreach (var printer in _printers)
                 {
                     <option value="@printer.Id">@GetPrinterName(printer)</option>
@@ -46,9 +50,6 @@
                           OptionText="@(p => p.Brand + ", " + p.Model)"
                           @bind-SelectedOptions="@_selectedOptions"
                           Appearance="Appearance.Stealth"/>
-        </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-secondary my-2">Create User</button>
         </div>
     </EditForm>
 }
@@ -73,9 +74,12 @@
         return $"{printer.Brand} : {printer.Model}";
     }
 
-    private Task CreateOrderAsync()
+    private async Task CreateOrderAsync()
     {
-        throw new NotImplementedException();
+        _order.Components = _selectedOptions.Select(x => x.ModelNumber).ToList();
+        await OrderService.AddAsync(_order);
+        
+        NavigationManager.NavigateTo("listorders");
     }
 
 }
